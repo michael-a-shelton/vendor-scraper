@@ -1,0 +1,39 @@
+[
+  {
+    "addToCartURL": "https://www.bestbuy.com/cart/api/v1/addToCart",
+    "checkoutURL": "bestbuy.com/checkout",
+    "company": "bestbuy",
+    "verb": "POST",
+    "origin": "https://www.bestbuy.com",
+    "cookieFilePath": "config/cookies/bestbuy",
+    "delay": "10s",
+    "payload": "{\"items\":[{\"skuId\":\"5901353\"}]}",
+    "headers": {
+      "authority": "www.bestbuy.com",
+      "Content-Type": "application/json",
+      "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+      "accept": "application/json",
+      "sec-ch-ua-mobile": "?0",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+      "origin": "https://www.bestbuy.com",
+      "sec-fetch-site": "same-origin",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-dest": "empty",
+      "referer": "https://www.bestbuy.com/cart",
+      "accept-language": "en-US,en;q=0.9,de-DE;q=0.8,de;q=0.7"
+    }
+  },
+  {
+    "addToCartURL": "https://www.newegg.com/api/Add2Cart",
+    "checkoutURL": "newegg.com/checkout",
+    "company": "newegg",
+    "verb": "POST",
+    "origin": "https://www.newegg.com",
+    "cookieFilePath": "config/cookies/newegg",
+    "delay": "10s",
+    "payload": "{\"ItemList\":[{\"ItemGroup\":\"Single\",\"ItemNumber\":\"9SIAYB7EJ98234\",\"Quantity\":1,\"OptionalInfos\":null,\"SaleType\":\"Sales\"}],\"CustomerNumber\":0}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+]

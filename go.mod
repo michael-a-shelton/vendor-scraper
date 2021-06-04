@@ -1,0 +1,1 @@
+module "github.com/michael-a-shelton/vendor-scraper"
