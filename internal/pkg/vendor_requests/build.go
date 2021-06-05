@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 )
 
 //go:embed config/vendor-data.json
@@ -23,7 +24,7 @@ type VendorData []struct {
 	Origin         string            `json:"origin"`
 	CookieFilePath string            `json:"cookieFilePath"`
 	Delay          string            `json:"delay"`
-	Payload        string            `json:"payload,omitempty"`
+	Payload        interface{}       `json:"payload,omitempty"`
 	Headers        map[string]string `json:"headers"`
 }
 
@@ -39,31 +40,44 @@ func BuildRequestFromConfig() (*[]http.Request, error) {
 	for i := 0; i < len(data); i++ {
 		parsedURL, _ := url.ParseRequestURI(data[i].AddToCartURL)
 
-		req, err := http.NewRequest(data[i].Verb, parsedURL.String(), bytes.NewBuffer([]byte(data[i].Payload)))
+		payloadBytes, err := json.Marshal(data[i].Payload)
+		if err != nil {
+			fmt.Printf("Marshal failed: %v", err)
+		}
+
+		body := bytes.NewReader(payloadBytes)
+
+		req, err := http.NewRequest(data[i].Verb, parsedURL.String(), body)
 		if err != nil {
 			return nil, err
 		}
 
-		req.ContentLength = int64(len(data[i].Payload))
 		req.Header = make(http.Header)
 		req.Host = data[i].Origin
 
-		cookieBytes, err := cookies.ReadFile(data[i].CookieFilePath)
+		err = setCookie(req, data[i].CookieFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("failed to get cookie: %w", err)
+			return nil, err
 		}
-
-		req.Header.Set("cookie", string(cookieBytes))
 
 		for header, value := range data[i].Headers {
 			req.Header.Set(header, value)
 		}
 
 		requests = append(requests, *req)
-
 	}
 
 	return &requests, nil
+}
+
+func setCookie(req *http.Request, cookieFilePath string) error {
+	cookieBytes, err := cookies.ReadFile(cookieFilePath)
+	if err != nil {
+		return fmt.Errorf("failed to get cookie: %w", err)
+	}
+
+	req.Header.Set("Cookie", os.ExpandEnv(string(cookieBytes)))
+	return nil
 }
 
 func readDataFromString(data *VendorData) error {

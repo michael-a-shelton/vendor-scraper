@@ -27,7 +27,7 @@ func main() {
 		}
 
 		if resp.StatusCode != http.StatusOK {
-			fmt.Printf("Failed Request: %+v\nResponse: %+v\nBody:%+v\n", req, resp, req.Body)
+			fmt.Printf("Failed Request: %+v\nResponse: %+v\nBody:%s\n", req, resp, resp.Body)
 		}
 
 		defer func() {
@@ -48,3 +48,4 @@ func main() {
 	}
 
 }
+
